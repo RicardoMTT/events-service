@@ -1,0 +1,51 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: events-service
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+      properties:
+        spring.json.add.type.headers: false
+  r2dbc:
+    url: r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:events_db}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:root}
+    pool:
+      enabled: true
+      initial-size: 5
+      max-size: 20
+
+  # Flyway usa JDBC solo para correr las migraciones al arrancar;
+  # el resto de la app opera 100% reactivo via R2DBC.
+  flyway:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:events_db}
+    user: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:root}
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+  health:
+    r2dbc:
+      enabled: true
+
+logging:
+  level:
+    com.eventsplatform.events: INFO
+    org.springframework.r2dbc: WARN
