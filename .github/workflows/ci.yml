@@ -29,7 +29,7 @@ jobs:
           cache: maven
 
       - name: Run tests
-        run: ./mvnw test
+        run: mvn test
 
       - name: Build application
-        run: ./mvnw package
+        run: mvn package
