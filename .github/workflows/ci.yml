@@ -50,7 +50,7 @@ jobs:
       - name: Run SonarQube analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn verify sonar:sonar
+        run: mvn verify sonar:sonar -Dsonar.qualitygate.wait=true
 
   build:
     name: Build application
