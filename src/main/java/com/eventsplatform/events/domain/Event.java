@@ -1,5 +1,6 @@
 package com.eventsplatform.events.domain;
 
+import com.eventsplatform.events.dto.InventorySyncStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +36,8 @@ public class Event {
     private String location;
 
     private OffsetDateTime startDate;
+
+    private InventorySyncStatus inventorySyncStatus;
 
     private OffsetDateTime endDate;
 

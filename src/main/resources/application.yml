@@ -44,6 +44,31 @@ management:
   health:
     r2dbc:
       enabled: true
+feign:
+  client:
+    config:
+      inventory-service:
+        connectTimeout: 2000
+        readTimeout: 3000
+
+resilience4j:
+  retry:
+    instances:
+      inventory-service:
+        max-attempts: 3
+        wait-duration: 300ms
+        retry-exceptions:
+          - java.io.IOException
+          - feign.FeignException$ServiceUnavailable
+          - feign.FeignException$GatewayTimeout
+  circuitbreaker:
+    instances:
+      inventory-service:
+        sliding-window-size: 20
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 5
+
 
 logging:
   level:

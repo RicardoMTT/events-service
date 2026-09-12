@@ -1,0 +1,1 @@
+ALTER TABLE events ADD COLUMN inventory_sync_status VARCHAR(20) NOT NULL DEFAULT 'PENDING';
