@@ -9,6 +9,7 @@ import reactor.core.publisher.Mono;
  * para no bloquear el desarrollo del resto del servicio.
  */
 public interface EventPublisher {
+    Mono<Void> publishCreated(EventDomainEvent event);
 
-    Mono<Void> publish(EventDomainEvent domainEvent);
+    Mono<Void> publishPublished(EventDomainEvent event);
 }

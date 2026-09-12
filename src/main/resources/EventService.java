@@ -59,12 +59,13 @@ public class EventService {
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .imageUrl(request.getImageUrl())
+                .capacity(request.getCapacity())   // ← agregar esta línea
                 .status(EventStatus.DRAFT)
                 .build();
 
         return eventRepository.save(event)
                 .flatMap(saved -> eventPublisher
-                        .publish(EventDomainEvent.of(EventDomainEvent.CREATED, saved.getId(), organizerId))
+                        .publishCreated(EventDomainEvent.of(EventDomainEvent.CREATED, saved.getId(), organizerId, saved.getCapacity()))
                         .thenReturn(saved))
                 .map(EventResponse::from);
     }
@@ -89,8 +90,9 @@ public class EventService {
                     event.setImageUrl(request.getImageUrl());
                     return eventRepository.save(event);
                 })
+                // OBSS
                 .flatMap(saved -> eventPublisher
-                        .publish(EventDomainEvent.of(EventDomainEvent.UPDATED, saved.getId(), organizerId))
+                        .publishCreated(EventDomainEvent.of(EventDomainEvent.UPDATED, saved.getId(), organizerId, saved.getCapacity()))
                         .thenReturn(saved))
                 .map(EventResponse::from);
     }
@@ -108,7 +110,7 @@ public class EventService {
                     return eventRepository.save(event);
                 })
                 .flatMap(saved -> eventPublisher
-                        .publish(EventDomainEvent.of(EventDomainEvent.PUBLISHED, saved.getId(), organizerId))
+                        .publishPublished(EventDomainEvent.of(EventDomainEvent.PUBLISHED, saved.getId(), organizerId, saved.getCapacity()))
                         .thenReturn(saved))
                 .map(EventResponse::from);
     }
@@ -125,8 +127,9 @@ public class EventService {
                     event.setStatus(EventStatus.CANCELLED);
                     return eventRepository.save(event);
                 })
+                // OBSS
                 .flatMap(saved -> eventPublisher
-                        .publish(EventDomainEvent.of(EventDomainEvent.CANCELLED, saved.getId(), organizerId))
+                        .publishCreated(EventDomainEvent.of(EventDomainEvent.CANCELLED, saved.getId(), organizerId, saved.getCapacity()))
                         .thenReturn(saved))
                 .map(EventResponse::from);
     }

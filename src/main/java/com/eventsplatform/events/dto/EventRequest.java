@@ -1,9 +1,6 @@
 package com.eventsplatform.events.dto;
 
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,4 +33,7 @@ public class EventRequest {
     private OffsetDateTime endDate;
 
     private String imageUrl;
+
+    @Min(value = 1, message = "La capacidad debe ser mayor a 0")
+    private Integer capacity;
 }

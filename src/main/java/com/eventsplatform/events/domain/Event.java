@@ -38,6 +38,8 @@ public class Event {
 
     private OffsetDateTime endDate;
 
+    private Integer capacity;
+
     private EventStatus status;
 
     private String imageUrl;

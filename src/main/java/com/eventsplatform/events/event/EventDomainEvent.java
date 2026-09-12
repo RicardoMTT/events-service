@@ -12,14 +12,46 @@ public record EventDomainEvent(
         String type,
         UUID eventId,
         UUID organizerId,
-        Instant occurredAt
+        Instant occurredAt,
+        Integer capacity
 ) {
     public static final String CREATED = "event.created";
     public static final String PUBLISHED = "event.published";
     public static final String UPDATED = "event.updated";
     public static final String CANCELLED = "event.cancelled";
 
-    public static EventDomainEvent of(String type, UUID eventId, UUID organizerId) {
-        return new EventDomainEvent(type, eventId, organizerId, Instant.now());
+    public static EventDomainEvent of(String type, UUID eventId, UUID organizerId,Integer capacity) {
+        return new EventDomainEvent(type, eventId, organizerId, Instant.now(), capacity);
     }
+
+
+    public static EventDomainEvent created(
+            UUID eventId,
+            UUID organizerId,
+            Integer capacity
+    ) {
+
+        return new EventDomainEvent(
+                CREATED,
+                eventId,
+                organizerId,
+                Instant.now(),
+                capacity
+        );
+    }
+
+    public static EventDomainEvent published(
+            UUID eventId,
+            UUID organizerId,
+            Integer capacity
+    ) {
+        return new EventDomainEvent(
+                PUBLISHED,
+                eventId,
+                organizerId,
+                Instant.now(),
+                capacity
+        );
+    }
+
 }

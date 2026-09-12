@@ -16,15 +16,32 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class KafkaEventPublisher implements EventPublisher {
-    private static final String TOPIC = "event.created";
+
+
+    private static final String CREATED_TOPIC = "event.created";
+
+    private static final String PUBLISHED_TOPIC = "event.published";
+
     private final KafkaTemplate<String, EventDomainEvent> kafkaTemplate;
 
     @Override
-    public Mono<Void> publish(EventDomainEvent event) {
+    public Mono<Void> publishCreated(EventDomainEvent event) {
 
         return Mono.fromFuture(
                 kafkaTemplate.send(
-                        TOPIC,
+                        CREATED_TOPIC,
+                        event.eventId().toString(),
+                        event
+                )
+        ).then();
+    }
+
+    @Override
+    public Mono<Void> publishPublished(EventDomainEvent event) {
+
+        return Mono.fromFuture(
+                kafkaTemplate.send(
+                        PUBLISHED_TOPIC,
                         event.eventId().toString(),
                         event
                 )

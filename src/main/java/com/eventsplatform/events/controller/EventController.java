@@ -49,6 +49,7 @@ public class EventController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<EventResponse> create(
+            // No se valida el JWT ni conoce a los usuarios — confía en que el API gateway ya autenticó al usuario y envíe el ID en el header X-User-Id correcto
             @RequestHeader(USER_ID_HEADER) UUID organizerId,
             @Valid @RequestBody EventRequest request) {
         return eventService.create(organizerId, request);
